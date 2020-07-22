@@ -11,10 +11,9 @@ for i in range(n) :
 	if p<buy_price :
 		buy_price=p
 		temp_buy_date=i+1
-		sell_price=0
 	elif p-buy_price>profit :
 		buy_date=temp_buy_date
-		profit=p-buy_date
+		profit=p-buy_price
 
 print(str(profit)+"\n"+str(buy_date))
 
