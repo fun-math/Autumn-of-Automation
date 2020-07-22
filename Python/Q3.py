@@ -29,7 +29,3 @@ class Complex :
 		else :
 			print("{}-{}i".format(self.x,-self.y))
 
-
-
-a=Complex(2,1)
-print(a.mod())
