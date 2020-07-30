@@ -1,5 +1,7 @@
 #None of Flann based or brute force method gave good
-# resutls.  
+# resutls.
+
+  
 import cv2
 import numpy as np 
 
@@ -9,7 +11,9 @@ _,_=cap.read()
 _,_=cap.read()
 _,_=cap.read()
 
-template=cv2.imread("football_1.png",0)
+template=cv2.imread("whiteball.jpeg",0)
+_,template=cv2.threshold(template,100,255,cv2.THRESH_TOZERO)
+#template=cv2.bitwise_not(template)
 orb=cv2.ORB_create()
 
 while cap.isOpened():
@@ -17,6 +21,10 @@ while cap.isOpened():
 
 	frame_gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
 	frame_gray=frame_gray.astype(np.uint8)
+	mask=np.zeros([720,1280],dtype=np.uint8)
+	mask[100:200,0:250]=(255*np.ones([100,250])).astype(np.uint8)
+	mask=cv2.bitwise_not(mask)
+	frame_gray=cv2.bitwise_and(frame_gray,frame_gray,mask=mask)
 	kp1,des1=orb.detectAndCompute(template,None)
 	kp2,des2=orb.detectAndCompute(frame_gray,None)
 	
@@ -40,15 +48,16 @@ while cap.isOpened():
 	   	if m.distance < 0.8*n.distance:
 	   		matchesMask[i]=[1,0]
 
-	draw_params = dict(matchColor = (0,255,0),
+	draw_params = dict(matchColor = (0,0,255),
                    singlePointColor = (255,0,0),
                    matchesMask = matchesMask,
                    flags = 0)
 	img = cv2.drawMatchesKnn(template,kp1,frame,kp2,matches,None,**draw_params)
-
+	#cv2.imshow('mask',mask)
 	cv2.imshow("frame",img)
 	if cv2.waitKey(40) & 0xFF==ord('q'):
 		break
+print(frame_gray.shape)
 cap.release()
 
 
