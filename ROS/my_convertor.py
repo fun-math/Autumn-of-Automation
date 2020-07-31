@@ -3,11 +3,11 @@
 import rospy
 from math import atan2,asin,pi
 from time import sleep
-from my_package.msg import quaternions
-from my_package.msg import euler_angles
+from my_package.msg import Quaternions
+from my_package.msg import Euler_angles
 
 def talker(my_output):
-	pub = rospy.Publisher('topic2',euler_angles,queue_size=10)
+	pub = rospy.Publisher('topic2',Euler_angles,queue_size=10)
 	rospy.init_node('my_converter',anonymous=True)
 	sleep(1)
 
@@ -15,7 +15,7 @@ def talker(my_output):
 		pub.publish(my_output)
 
 def callback(my_input):
-	output=euler_angles()
+	output=Euler_angles()
 	w=my_input.w
 	x=my_input.x
 	y=my_input.y
@@ -31,7 +31,7 @@ def callback(my_input):
 def listener():
 	rospy.init_node('my_converter',anonymous=True)
 
-	rospy.Subscriber('topic1',quaternions,callback)
+	rospy.Subscriber('topic1',Quaternions,callback)
 
 	rospy.spin()
 
